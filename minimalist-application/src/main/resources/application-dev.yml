@@ -62,7 +62,7 @@ spring:
                     type: com.zaxxer.hikari.HikariDataSource
                     driver-class-name: com.mysql.cj.jdbc.Driver
                     username: root
-                    password: 123456
+                    password: root
                     url: jdbc:mysql://localhost:3306/minimalist?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useAffectedRows=true&rewriteBatchedStatements=true
 
     servlet:
@@ -81,7 +81,7 @@ spring:
             # Redis服务器连接端口
             port: 6379
             # Redis服务器连接密码（默认为空）
-            password: 1
+            password:
             # 读取超时时间
             timeout: 10s
             # 连接超时时间

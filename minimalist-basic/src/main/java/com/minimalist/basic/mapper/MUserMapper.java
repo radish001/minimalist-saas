@@ -3,9 +3,7 @@ package com.minimalist.basic.mapper;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.minimalist.basic.entity.enums.StatusEnum;
-import com.minimalist.basic.entity.po.table.MDeptTableDef;
-import com.minimalist.basic.entity.po.table.MUserDeptTableDef;
-import com.minimalist.basic.entity.po.table.MUserTableDef;
+
 import com.minimalist.basic.entity.vo.user.UserQueryVO;
 import com.minimalist.basic.entity.vo.user.UserVO;
 import com.minimalist.basic.utils.CommonConstant;
@@ -114,14 +112,14 @@ public interface MUserMapper extends BaseMapper<MUser> {
      * @return 用户分页数据
      */
     default Page<UserVO> selectPageUserList(UserQueryVO query) {
-        /* select u.* FROM m_user u
+       /* *//* select u.* FROM m_user u
          * inner join m_user_dept ud on u.user_id = ud.user_id
          * inner join m_dept d on d.dept_id = ud.dept_id
          * WHERE (
          *  d.dept_id = 1677964029214371840 or d.dept_id in (select t.dept_id from m_dept t where find_in_set(1677964029214371840, ancestors))
          * )
          * group by u.user_id;
-         */
+         *//*
         QueryWrapper queryWrapper = QueryWrapper.create()
                 .select(MUserTableDef.MUSER.ALL_COLUMNS)
                 .from(MUserTableDef.MUSER)
@@ -143,7 +141,8 @@ public interface MUserMapper extends BaseMapper<MUser> {
             );
         }
         queryWrapper.groupBy(MUserTableDef.MUSER.USER_ID);
-        return paginateAs(query.getPageNum(), query.getPageSize(), queryWrapper, UserVO.class);
+        return paginateAs(query.getPageNum(), query.getPageSize(), queryWrapper, UserVO.class);*/
+        return null;
     }
 
 }
