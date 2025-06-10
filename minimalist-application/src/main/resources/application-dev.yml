@@ -63,7 +63,7 @@ spring:
                     driver-class-name: com.mysql.cj.jdbc.Driver
                     username: root
                     password: root
-                    url: jdbc:mysql://localhost:3306/minimalist?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useAffectedRows=true&rewriteBatchedStatements=true
+                    url: jdbc:mysql://localhost:13306/minimalist?useUnicode=true&characterEncoding=UTF-8&useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true&useAffectedRows=true&rewriteBatchedStatements=true
 
     servlet:
         multipart:
@@ -77,9 +77,9 @@ spring:
             # Redis数据库索引（默认为0）
             database: 3
             # Redis服务器地址
-            host: 127.0.0.1
+            host: localhost
             # Redis服务器连接端口
-            port: 6379
+            port: 16379
             # Redis服务器连接密码（默认为空）
             password:
             # 读取超时时间
