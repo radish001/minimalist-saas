@@ -269,6 +269,10 @@ INSERT INTO `m_perms` VALUES (86, 1846813437867806720, 'basic:file:download', '�
 INSERT INTO `m_perms` VALUES (87, 1846813517064654848, 'basic:file:get', '查询文件', 1683285343149096960, 40, NULL, NULL, 'B', NULL, b'0', b'1', NULL, 1, 0, '2024-10-17 15:20:29.294472', 0, '2024-10-17 15:20:29.294472', b'0', 0);
 INSERT INTO `m_perms` VALUES (88, 1846819585257852928, 'system:swagger', '查看接口', 1680749851857862656, 10, NULL, NULL, 'B', NULL, b'0', b'1', NULL, 1, 0, '2024-10-17 15:44:36.063573', 0, '2024-10-17 15:44:36.063573', b'0', 0);
 
+INSERT INTO `m_perms` VALUES (89, 1673167646320123576, NULL, '水处理工艺管理', 1669336412647133184, 50, '/basic/wps/technical', 'IconUserGroup', 'M', '/basic/role/RoleMgt.vue', b'0', b'1', '', 1, 0, '2023-06-26 11:13:47.496133', 0, '2023-07-31 21:29:13.988209', b'0', 6);
+INSERT INTO `m_perms` VALUES (90, 1846819585257852929, 'basic:wps:routes', '获取工艺路线信息', 1673167646320123576, 50, NULL, NULL, 'B', NULL, b'0', b'1', NULL, 1, 0, '2024-10-17 15:44:36.063573', 0, '2024-10-17 15:44:36.063573', b'0', 0);
+INSERT INTO `m_perms` VALUES (91, 1846819585257852930, 'basic:wps:routeInfo', '获取工艺路线详情', 1673167646320123576, 50, NULL, NULL, 'B', NULL, b'0', b'1', NULL, 1, 0, '2024-10-17 15:44:36.063573', 0, '2024-10-17 15:44:36.063573', b'0', 0);
+
 -- ----------------------------
 -- Table structure for m_post
 -- 岗位表
@@ -423,6 +427,9 @@ INSERT INTO `m_role_perm` VALUES (1941, 1671337763855073280, 1833688910472302592
 INSERT INTO `m_role_perm` VALUES (1942, 1671337763855073280, 1833688972682219520);
 INSERT INTO `m_role_perm` VALUES (1943, 1671337763855073280, 1680749851857862656);
 INSERT INTO `m_role_perm` VALUES (1944, 1671337763855073280, 1846819585257852928);
+INSERT INTO `m_role_perm` VALUES (1945, 1671337763855073280, 1673167646320123576);
+INSERT INTO `m_role_perm` VALUES (1946, 1671337763855073280, 1846819585257852929);
+INSERT INTO `m_role_perm` VALUES (1947, 1671337763855073280, 1846819585257852930);
 
 -- ----------------------------
 -- Table structure for m_storage
@@ -661,3 +668,42 @@ INSERT INTO `m_user_role` VALUES (27, 0, 1671337763855073280);
 
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+DROP TABLE IF EXISTS `m_wps_routes`;
+CREATE TABLE `m_wps_routes`  (
+                                `id` bigint(0) NOT NULL AUTO_INCREMENT,
+                                `tenant_id` bigint(0) NOT NULL COMMENT '租户id',
+                                `title` varchar(255) NOT NULL COMMENT '标题',
+                                `create_id` bigint(0) NULL DEFAULT 0 COMMENT '创建人ID',
+                                `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
+                                `update_id` bigint(0) NULL DEFAULT 0 COMMENT '更新人ID',
+                                `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
+                                `deleted` bit(1) NULL DEFAULT b'0' COMMENT '逻辑删除  0未删除  1已删除',
+                                `version` int(0) NULL DEFAULT 0 COMMENT '版本号',
+                                PRIMARY KEY (`id`) USING BTREE,
+                                INDEX `tenant_id_idx`(`tenant_id`) USING BTREE COMMENT '租户ID索引'
+
+) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '路线信息表' ROW_FORMAT = Dynamic;
+
+
+DROP TABLE IF EXISTS `m_wps_route_info`;
+CREATE TABLE `m_wps_route_info`  (
+                                 `id` bigint(0) NOT NULL AUTO_INCREMENT,
+                                 `tenant_id` bigint(0) NOT NULL COMMENT '租户id',
+                                 `route_id` bigint(0) NOT NULL COMMENT '路线信息id',
+                                 `roadmap` varchar(4096) NOT NULL COMMENT '技术路线图',
+                                 `pattern_brain_map` varchar(4096) NOT NULL COMMENT '模式脑图',
+                                 `processing_evaluation` JSON NOT NULL COMMENT '处理过程评估信息',
+                                 `assessment_result` JSON NOT NULL COMMENT '综合评估结果信息',
+                                 `create_id` bigint(0) NULL DEFAULT 0 COMMENT '创建人ID',
+                                 `create_time` datetime(6) NULL DEFAULT NULL COMMENT '创建时间',
+                                 `update_id` bigint(0) NULL DEFAULT 0 COMMENT '更新人ID',
+                                 `update_time` datetime(6) NULL DEFAULT NULL COMMENT '更新时间',
+                                 `deleted` bit(1) NULL DEFAULT b'0' COMMENT '逻辑删除  0未删除  1已删除',
+                                 `version` int(0) NULL DEFAULT 0 COMMENT '版本号',
+                                 PRIMARY KEY (`id`) USING BTREE,
+                                 INDEX `route_id_idx`(`route_id`) USING BTREE COMMENT '路线信息id表'
+
+) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci COMMENT = '路线信息详情表' ROW_FORMAT = Dynamic;
+
