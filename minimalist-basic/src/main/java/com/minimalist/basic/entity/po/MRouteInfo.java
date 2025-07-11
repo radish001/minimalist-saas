@@ -31,6 +31,7 @@ public class MRouteInfo extends BaseEntity implements Serializable {
     /**
      * 租户id
      */
+    @Column(tenantId = true)
     private Long tenantId;
 
     /**

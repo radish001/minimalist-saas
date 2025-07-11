@@ -11,11 +11,11 @@ import com.zaxxer.hikari.HikariDataSource;
  */
 public class GeneratorCodeHandler {
 
-    public static final String url = "jdbc:mysql://127.0.0.1:3306/minimalist?characterEncoding=utf-8";
+    public static final String url = "jdbc:mysql://localhost:13306/minimalist?characterEncoding=utf-8";
 
     public static final String username = "root";
 
-    public static final String password = "123456";
+    public static final String password = "root";
 
     public static void main(String[] args) {
         //配置数据源
@@ -83,7 +83,9 @@ public class GeneratorCodeHandler {
                 "m_user",
                 "m_user_dept",
                 "m_user_post",
-                "m_user_role"
+                "m_user_role",
+                "m_wps_routes",
+                "m_wps_route_info"
         );
         //是否生成service和controller
         globalConfig.setServiceGenerateEnable(true);

@@ -33,7 +33,7 @@ public class RouteController {
     @GetMapping("/route")
     @SaCheckPermission("basic:wps:routeInfo")
     @Operation(summary = "查询技术路线图详情")
-    public ResponseEntity<RouteInfoVO> getRouteInfo(@RequestParam String routeId) {
+    public ResponseEntity<RouteInfoVO> getRouteInfo(@RequestParam("routeId") String routeId) {
         return ResponseEntity.ok(routeService.getRouteInfo(routeId));
     }
 

@@ -3,6 +3,7 @@ package com.minimalist.basic.entity.po;
 import com.minimalist.basic.config.mybatis.InsertFullColumnHandler;
 import com.minimalist.basic.config.mybatis.UpdateFullColumnHandler;
 import com.minimalist.basic.config.mybatis.bo.BaseEntity;
+import com.mybatisflex.annotation.Column;
 import com.mybatisflex.annotation.Table;
 import lombok.*;
 
@@ -31,6 +32,7 @@ public class MRoutes extends BaseEntity implements Serializable {
     /**
      * 租户id
      */
+    @Column(tenantId = true)
     private Long tenantId;
 
     /**

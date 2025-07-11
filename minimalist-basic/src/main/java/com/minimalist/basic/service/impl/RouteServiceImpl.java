@@ -7,8 +7,8 @@ import com.minimalist.basic.entity.po.MRouteInfo;
 import com.minimalist.basic.entity.po.MRoutes;
 import com.minimalist.basic.entity.vo.wps.RouteVO;
 import com.minimalist.basic.entity.vo.wps.RouteInfoVO;
-import com.minimalist.basic.mapper.MRouteInfoMapper;
-import com.minimalist.basic.mapper.MRouteMapper;
+import com.minimalist.basic.mapper.MWpsRouteInfoMapper;
+import com.minimalist.basic.mapper.MWpsRoutesMapper;
 import com.minimalist.basic.service.RouteService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,23 +29,23 @@ public class RouteServiceImpl implements RouteService {
 
 
     @Autowired
-    private MRouteMapper routeMapper;
+    private MWpsRoutesMapper routeMapper;
 
     @Autowired
-    private MRouteInfoMapper routeInfoMapper;
+    private MWpsRouteInfoMapper routeInfoMapper;
 
 
     @Override
     public List<RouteVO> getRoutes(String tenantId) {
         Assert.notBlank(tenantId, () -> new BusinessException(RespEnum.PARAM_ERROR.getDesc()));
-        List<MRoutes> routes = routeMapper.selectByTenantId(Long.getLong(tenantId));
+        List<MRoutes> routes = routeMapper.selectByTenantId(Long.parseLong(tenantId));
         return convertToVo(routes);
     }
 
     @Override
     public RouteInfoVO getRouteInfo(String routeId) {
         Assert.notBlank(routeId, () -> new BusinessException(RespEnum.PARAM_ERROR.getDesc()));
-        MRouteInfo mRouteInfo = routeInfoMapper.selectByRouteId(Long.getLong(routeId));
+        MRouteInfo mRouteInfo = routeInfoMapper.selectRouteInfoByRouteId(Long.parseLong(routeId));
         return convertToVo(mRouteInfo);
     }
 
