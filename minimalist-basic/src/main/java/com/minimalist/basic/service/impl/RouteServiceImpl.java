@@ -15,6 +15,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /**
  * @author huxiaodong
@@ -39,7 +42,10 @@ public class RouteServiceImpl implements RouteService {
     public List<RouteVO> getRoutes(String tenantId) {
         Assert.notBlank(tenantId, () -> new BusinessException(RespEnum.PARAM_ERROR.getDesc()));
         List<MRoutes> routes = routeMapper.selectByTenantId(Long.parseLong(tenantId));
-        return convertToVo(routes);
+        List<Long> routeIds = routes.stream().map(MRoutes::getId).toList();
+        List<MRouteInfo> routeInfos = routeInfoMapper.selectRouteInfoByRouteIds(routeIds);
+        Map<Long, MRouteInfo> routeInfoMap = routeInfos.stream().collect(Collectors.toMap(MRouteInfo::getRouteId, Function.identity()));
+        return convertToVo(routes, routeInfoMap);
     }
 
     @Override
@@ -50,12 +56,13 @@ public class RouteServiceImpl implements RouteService {
     }
 
 
-    private List<RouteVO> convertToVo(List<MRoutes> routes) {
+    private List<RouteVO> convertToVo(List<MRoutes> routes, Map<Long, MRouteInfo> mRouteInfoMap) {
         List<RouteVO> list = new ArrayList<>();
         for(MRoutes mRoutes : routes){
             RouteVO vo = new RouteVO();
             vo.setRouteId(mRoutes.getId());
             vo.setTitle(mRoutes.getTitle());
+            vo.setContent(convertToVo(mRouteInfoMap.get(mRoutes.getId())));
             list.add(vo);
         }
         return list;

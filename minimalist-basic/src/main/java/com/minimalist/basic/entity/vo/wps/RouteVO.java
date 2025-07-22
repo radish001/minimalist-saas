@@ -33,9 +33,13 @@ public class RouteVO implements Serializable {
     @Schema(name = "routeId", description = "路线信息id", type = "string")
     private Long routeId;
 
-    @NotBlank(message = "用户账号不能为空", groups = {Add.class, Update.class})
+    @NotBlank(message = "路线标题不能为空", groups = {Add.class, Update.class})
     @Schema(name = "title", description = "路线信息标题", type = "string")
     private String title;
+
+    @NotNull(message = "路线详情不能为空", groups = {Add.class, Update.class})
+    @Schema(name = "content", description = "路线详情", type = "object")
+    private RouteInfoVO content;
 
 
 
