@@ -115,25 +115,17 @@ public interface MUserMapper extends BaseMapper<MUser> {
      * @return 用户分页数据
      */
     default Page<UserVO> selectPageUserList(UserQueryVO query) {
-       /* *//* select u.* FROM m_user u
-         * inner join m_user_dept ud on u.user_id = ud.user_id
-         * inner join m_dept d on d.dept_id = ud.dept_id
-         * WHERE (
-         *  d.dept_id = 1677964029214371840 or d.dept_id in (select t.dept_id from m_dept t where find_in_set(1677964029214371840, ancestors))
-         * )
-         * group by u.user_id;
-         */
-        QueryWrapper queryWrapper = QueryWrapper.create()
-                .select(MUserTableDef.MUSER.ALL_COLUMNS)
+        // 1. 构建基础查询，仅查user_id并分页
+        QueryWrapper idQuery = QueryWrapper.create()
+                .select(MUserTableDef.MUSER.USER_ID)
                 .from(MUserTableDef.MUSER)
                 .leftJoin(MUserDeptTableDef.MUSER_DEPT).on(MUserDeptTableDef.MUSER_DEPT.USER_ID.eq(MUserTableDef.MUSER.USER_ID))
                 .leftJoin(MDeptTableDef.MDEPT).on(MDeptTableDef.MDEPT.DEPT_ID.eq(MUserDeptTableDef.MUSER_DEPT.DEPT_ID))
                 .where(MUserTableDef.MUSER.STATUS.eq(query.getStatus()))
                 .and(MUserTableDef.MUSER.PHONE.like(query.getPhone()))
                 .and(MUserTableDef.MUSER.USER_REAL_NAME.like(query.getUserRealName()));
-        //deptId=0表示全部，需要忽略
         if (ObjectUtil.isNotNull(query.getDeptId()) && CommonConstant.ZERO != query.getDeptId()) {
-            queryWrapper.and(
+            idQuery.and(
                     MDeptTableDef.MDEPT.DEPT_ID.eq(query.getDeptId())
                             .or(MDeptTableDef.MDEPT.DEPT_ID.in(
                                     QueryWrapper.create()
@@ -143,9 +135,29 @@ public interface MUserMapper extends BaseMapper<MUser> {
                             ))
             );
         }
-        queryWrapper.groupBy(MUserTableDef.MUSER.USER_ID);
-        return paginateAs(query.getPageNum(), query.getPageSize(), queryWrapper, UserVO.class);
-        //return null;
+        idQuery.groupBy(MUserTableDef.MUSER.USER_ID);
+
+        // 2. 分页查user_id
+        Page<Long> idPage = paginateAs(query.getPageNum(), query.getPageSize(), idQuery, Long.class);
+        if (idPage.getRecords() == null || idPage.getRecords().isEmpty()) {
+            return new Page<>();
+        }
+        // 3. 用user_id in查询查详情
+        QueryWrapper detailQuery = QueryWrapper.create()
+                .select(MUserTableDef.MUSER.ALL_COLUMNS)
+                .from(MUserTableDef.MUSER)
+                .where(MUserTableDef.MUSER.USER_ID.in(idPage.getRecords()));
+        List<UserVO> userVOList = selectListByQueryAs(detailQuery, UserVO.class);
+
+        // 4. 保持顺序
+        List<Long> idOrder = idPage.getRecords();
+        userVOList.sort((a, b) -> idOrder.indexOf(a.getUserId()) - idOrder.indexOf(b.getUserId()));
+
+        // 5. 封装分页结果
+        // 直接 new Page<>(pageNum, pageSize, totalRow)
+        Page<UserVO> page = new Page<>(idPage.getPageNumber(), idPage.getPageSize(), idPage.getTotalRow());
+        page.setRecords(userVOList);
+        return page;
     }
 
 }
