@@ -143,7 +143,7 @@ public interface MUserMapper extends BaseMapper<MUser> {
                             ))
             );
         }
-        //queryWrapper.groupBy(MUserTableDef.MUSER.USER_ID);
+        queryWrapper.groupBy(MUserTableDef.MUSER.USER_ID);
         return paginateAs(query.getPageNum(), query.getPageSize(), queryWrapper, UserVO.class);
         //return null;
     }
